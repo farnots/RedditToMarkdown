@@ -1,6 +1,7 @@
 # RedditToMarkdown
 Export Reddit Post and comments to a markdown format
 
+![Exemple](https://raw.githubusercontent.com/farnots/RedditToMarkdown/master/exemple.png)
 
 ## How to use it
 

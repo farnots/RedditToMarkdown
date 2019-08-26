@@ -1,12 +1,15 @@
 const http = new XMLHttpRequest()
 var data
 var output = ''
+var style = 0
+var escapeNewLine = false
+var spaceComment = false
 
 function fetchData(url) {
   output = ''
+
   http.open("GET", `${url}.json`)
   http.responseType = 'json';
-
   http.send()
 
   http.onload = function() {
@@ -25,8 +28,31 @@ function fetchData(url) {
     download(output, 'output.md', 'text/plain')
   }
 }
+
+function setStyle() {
+  if (document.getElementById("treeOption").checked) {
+    style = 0
+  } else {
+    style = 1
+  }
+
+  if (document.getElementById("escapeNewLine").checked) {
+    escapeNewLine = true
+  } else {
+    escapeNewLine = false
+  }
+
+  if (document.getElementById("spaceComment").checked) {
+    spaceComment = true
+  } else {
+    spaceComment = false
+  }
+}
+
 function startExport() {
   console.log("Start exporting")
+  setStyle()
+
   var url = document.getElementById('url').value
   if (url) {
     fetchData(url)
@@ -52,15 +78,35 @@ function displayTitle(post) {
   output += `\nby *${post.author}* (↑ ${post.ups}/ ↓ ${post.downs})`
 }
 
-function displayComment(comment, index) {
-  depthTag = '─'.repeat(comment.data.depth)
-  if (depthTag != '') {
-    output += `├${depthTag} `
+function formatComment(text) {
+  if (escapeNewLine) {
+    return text.replace(/(\r\n|\n|\r)/gm, "");
   } else {
-    output += `##### `
+    return text
   }
+}
+
+function displayComment(comment, index) {
+
+  if (style == 0 ) {
+      depthTag = '─'.repeat(comment.data.depth)
+      if (depthTag != '') {
+        output += `├${depthTag} `
+      } else {
+        output += `##### `
+      }
+  } else {
+      depthTag = '\t'.repeat(comment.data.depth)
+      if (depthTag != '') {
+        output += `${depthTag}- `
+      } else {
+        output += `- `
+      }
+  }
+
   if (comment.data.body) {
-    output += `${comment.data.body} ⏤ by *${comment.data.author}* (↑ ${comment.data.ups}/ ↓ ${comment.data.downs})\n`
+    console.log(formatComment(comment.data.body))
+    output += `${formatComment(comment.data.body)} ⏤ by *${comment.data.author}* (↑ ${comment.data.ups}/ ↓ ${comment.data.downs})\n`
   } else {
     output += 'deleted \n'
   }
@@ -69,7 +115,13 @@ function displayComment(comment, index) {
     const subComment = comment.data.replies.data.children
     subComment.forEach(displayComment)
   }
+
   if (comment.data.depth == 0 && comment.data.replies) {
-    output += '└────\n\n'
+    if (style == 0 ) {
+      output += '└────\n\n'
+    } 
+    if (spaceComment) {
+      output += '\n'
+    }
   }
 }

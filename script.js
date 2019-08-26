@@ -18,6 +18,10 @@ function fetchData(url) {
     comments.forEach(displayComment);
 
     console.log("Done")
+    var ouput_display = document.getElementById("ouput-display");
+    var ouput_block = document.getElementById("ouput-block");
+    ouput_block.removeAttribute("hidden");
+    ouput_display.innerHTML = output;
     download(output, 'output.md', 'text/plain')
   }
 }

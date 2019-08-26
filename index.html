@@ -16,7 +16,12 @@
         <input name="url" class="form-control" type="text" id="url" placeholder="http://reddit.com/r/..." required />
       </div>
       <button class="btn btn-primary" onclick="startExport()">Export</button>
-      <a  href="" id="a" download disabled class="btn btn-success">Download markdown file</a><br>
+      <a  href="" id="a" download disabled class="btn btn-success">Download markdown file</a>
+      <div id="ouput-block" hidden>
+        <h3>Output</h3>
+        <pre id="ouput-display"></pre>
+        <br>
+      </div>
       <footer>
         <br>
         <p>Made by <a href="https://www.reddit.com/user/farnots">farnots</a></p>

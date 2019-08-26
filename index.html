@@ -1,86 +1,26 @@
-<html>
+<!doctype html>
+<html lang="en">
   <head>
+    <title>RedditToMarkdown</title>
     <meta charset="utf-8">
-    <script >
-      const http = new XMLHttpRequest()
-      var data
-      var output = ''
-
-      function fetchData(url) {
-        output = ''
-        http.open("GET", `${url}.json`)
-        http.responseType = 'json';
-
-        http.send()
-
-        http.onload = function() {
-          data = http.response;
-          const post = data[0].data.children[0].data
-          const comments = data[1].data.children
-          displayTitle(post)
-          output += "\n\n## Comments\n\n"
-          comments.forEach(displayComment);
-
-          console.log("Done")
-          console.log(output)
-          download(output, 'output.md', 'text/plain')
-        }
-      }
-      function startExport() {
-        console.log("Start exporting")
-        var url = document.getElementById('url').value
-        if (url) {
-          fetchData(url)
-        } else {
-          console.log("No url provided")
-        }
-      }
-
-      function download(text, name, type) {
-        var a = document.getElementById("a");
-        a.removeAttribute("hidden");
-        var file = new Blob([text], {type: type});
-        a.href = URL.createObjectURL(file);
-        a.download = name;
-      }
-
-      function displayTitle(post) {
-        output += `# ${post.title}\n`
-        if (post.selftext) {
-          output += `\n${post.selftext}\n`
-        }
-        output += `\n[permalink](http://reddit.com${post.permalink})`
-        output += `\nby *${post.author}* (↑ ${post.ups}/ ↓ ${post.downs})`
-      }
-
-      function displayComment(comment, index) {
-        depthTag = '─'.repeat(comment.data.depth)
-        if (depthTag != '') {
-          output += `├${depthTag} `
-        } else {
-          output += `##### `
-        }
-        if (comment.data.body) {
-          output += `${comment.data.body} ⏤ by *${comment.data.author}* (↑ ${comment.data.ups}/ ↓ ${comment.data.downs})\n`
-        } else {
-          output += 'deleted \n'
-        }
-
-        if (comment.data.replies) {
-          const subComment = comment.data.replies.data.children
-          subComment.forEach(displayComment)
-        }
-        if (comment.data.depth == 0 && comment.data.replies) {
-          output += '└────\n\n'
-        }
-      }
-    </script>
+    <meta name="author" content="Lucas Tarasconi">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script type="text/javascript" src="./script.js "></script>
   </head>
   <body>
-    <h1>Export reddit post to markdown format</h1>
-    <input name="url" style="width: 80%;" type="text" id="url" placeholder="http://reddit.com/r/..." />
-    <button onclick="startExport()">Export</button><br>
-    <a href="" id="a" download hidden>Download markdown file</a><br>
-    <p>Made by <a href="https://www.reddit.com/user/farnots">farnots</a></p>
+    <div class="container">
+      <h1>Export reddit post to markdown format</h1>
+      <div class="form-group">
+        <label for="url">Put the url of the reddit post you would like to export</label>
+        <input name="url" class="form-control" type="text" id="url" placeholder="http://reddit.com/r/..." required />
+      </div>
+      <button class="btn btn-primary" onclick="startExport()">Export</button>
+      <a  href="" id="a" download disabled class="btn btn-success">Download markdown file</a><br>
+      <footer>
+        <br>
+        <p>Made by <a href="https://www.reddit.com/user/farnots">farnots</a></p>
+      </footer>
+    </div>
   </body>
 </html>

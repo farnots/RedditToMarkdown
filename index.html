@@ -1,62 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>RedditToMarkdown</title>
-    <meta charset="utf-8" />
-    <meta name="author" content="Lucas Tarasconi" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link
+<head>
+  <title>RedditToMarkdown</title>
+  <meta charset="utf-8"/>
+  <meta name="author" content="Lucas Tarasconi"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+  <link
       rel="stylesheet"
       href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
       integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
       crossorigin="anonymous"
+  />
+  <script type="text/javascript" src="./script.js "></script>
+</head>
+<body onload="onDocumentReady()">
+<div class="container">
+  <h1>Export reddit post to markdown format</h1>
+  <div class="form-group">
+    <label for="url-field">Put the url of the reddit post you would like to export</label>
+    <input
+        name="url"
+        class="form-control"
+        type="text"
+        id="url-field"
+        placeholder="http://reddit.com/r/..."
+        required
     />
-    <script type="text/javascript" src="./script.js "></script>
-  </head>
-  <body onload="onDocumentReady()">
-    <div class="container">
-      <h1>Export reddit post to markdown format</h1>
-      <div class="form-group">
-        <label for="url-field">Put the url of the reddit post you would like to export</label>
-        <input
-          name="url"
-          class="form-control"
-          type="text"
-          id="url-field"
-          placeholder="http://reddit.com/r/..."
-          required
-        />
-      </div>
+  </div>
 
-      <label>Export style :</label>
-      <div class="form-check form-check-inline">
-        <input class="form-check-input" type="radio" name="exportOption" id="treeOption" checked />
-        <label class="form-check-label" for="treeOption">Tree style</label>
-        <input class="form-check-input" type="radio" name="exportOption" id="listOption" />
-        <label class="form-check-label" for="exportOption2">List style</label>
-      </div>
+  <label>Export style :</label>
+  <div class="form-check form-check-inline">
+    <input class="form-check-input" type="radio" name="exportOption" id="treeOption" checked/>
+    <label class="form-check-label" for="treeOption">Tree style</label>
+    <input class="form-check-input" type="radio" name="exportOption" id="listOption"/>
+    <label class="form-check-label" for="exportOption2">List style</label>
+  </div>
 
-      <label>Export option :</label>
+  <label>Export option :</label>
 
-      <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="escapeNewLine" />
-        <label class="form-check-label" for="escapeNewLine">Escape new line</label>
+  <div class="form-group form-check">
+    <input type="checkbox" class="form-check-input" id="escapeNewLine"/>
+    <label class="form-check-label" for="escapeNewLine">Escape new line</label>
 
-        <input type="checkbox" class="form-check-input" id="spaceComment" />
-        <label class="form-check-label" for="spaceComment">Space between main comment</label>
-      </div>
+    <input type="checkbox" class="form-check-input" id="spaceComment"/>
+    <label class="form-check-label" for="spaceComment">Space between main comment</label>
+  </div>
 
-      <button class="btn btn-primary" onclick="startExport()">Export</button>
-      <a href="" id="a" download disabled class="btn btn-success">Download markdown file</a>
-      <div id="ouput-block" hidden>
-        <h3>Output</h3>
-        <pre id="ouput-display"></pre>
-        <br />
-      </div>
-      <footer>
-        <br />
-        <p>Made by <a href="https://github.com/farnots">farnots</a></p>
-      </footer>
-    </div>
-  </body>
+  <button class="btn btn-primary" onclick="startExport()">Export</button>
+  <a href="" id="a" download disabled class="btn btn-success">Download markdown file</a>
+  <div id="ouput-block" hidden>
+    <h3>Output</h3>
+    <pre id="ouput-display"></pre>
+    <br/>
+  </div>
+  <footer>
+    <br/>
+    <p>Made by <a href="https://github.com/farnots">farnots</a></p>
+  </footer>
+</div>
+</body>
 </html>

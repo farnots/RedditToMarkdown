@@ -12,7 +12,8 @@ const onDocumentReady = () => {
   }
 };
 
-const getQueryParamUrl = () => new URLSearchParams(window.location.search).get('url') ?? null;
+const getQueryParamUrl = () => new URLSearchParams(window.location.search).get(
+    'url') ?? null;
 const getFieldUrl = () => document.getElementById('url-field').value;
 
 function fetchData(url) {
@@ -74,7 +75,7 @@ function startExport() {
 function download(text, name, type) {
   var a = document.getElementById('a');
   a.removeAttribute('disabled');
-  var file = new Blob([text], { type: type });
+  var file = new Blob([text], {type: type});
   a.href = URL.createObjectURL(file);
   a.download = name;
 }
@@ -115,8 +116,9 @@ function displayComment(comment, index) {
 
   if (comment.data.body) {
     console.log(formatComment(comment.data.body));
-    output += `${formatComment(comment.data.body)} ⏤ by *${comment.data.author}* (↑ ${
-      comment.data.ups
+    output += `${formatComment(
+        comment.data.body)} ⏤ by *${comment.data.author}* (↑ ${
+        comment.data.ups
     }/ ↓ ${comment.data.downs})\n`;
   } else {
     output += 'deleted \n';

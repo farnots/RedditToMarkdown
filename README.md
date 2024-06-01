@@ -10,7 +10,7 @@ You can download the source and open the *index.html* file or just go to [https:
 ## Features
 
 - Export Reddit post and comments to a markdown format
-- Listen to `url=<reddit_post_url>` query parameter to automatically load the post (thanks to @charmsRace : https://github.com/farnots/RedditToMarkdown/pull/2)
+- Listen to `url=<reddit_post_url>` query parameter to automatically load the post (thanks to [@charmsRace](https://github.com/charmsRace) : https://github.com/farnots/RedditToMarkdown/pull/2)
 
 ## Feedbacks
 

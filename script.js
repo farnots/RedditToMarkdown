@@ -4,7 +4,7 @@ let output = '';
 let style = 0;
 let escapeNewLine = false;
 let spaceComment = false;
-var postLoadAdditionalComments = false
+let postLoadAdditionalComments = false
 var selectedProxy = 'auto';
 
 // CORS Proxy configurations
@@ -234,8 +234,10 @@ function loadMoreComments(url, parentid, depthInd) {
 function setStyle() {
   if (document.getElementById('treeOption').checked) {
     style = 0;
-  } else {
+  } else if (document.getElementById('listOption').checked) {
     style = 1;
+  } else {
+    style = 2
   }
 
   if (document.getElementById('escapeNewLine').checked) {
@@ -318,34 +320,56 @@ function displayComment(comment, preexistingDepth = null) {
     } else {
       depthTag = `##### `;
     }
-  } else {
+  } else if (style == 1) {
     if (currentDepth > 0) {
       depthTag = `${'\t'.repeat(currentDepth)}- `;
     } else {
       depthTag = `- `;
     }
   }
+  else {
+    depthTag = '>'.repeat(currentDepth + 1);
+  }
 
   if (comment.data.body) {
     console.log(formatComment(comment.data.body));
-    output += `${depthTag}${formatComment(
-      comment.data.body)} ⏤ by *${comment.data.author}* (↑ ${comment.data.ups
-      }/ ↓ ${comment.data.downs})\n`;
+    if (style < 2) {
+      output += `${depthTag}${formatComment(
+        comment.data.body)} ⏤ by *${comment.data.author}* (↑ ${comment.data.ups
+        }/ ↓ ${comment.data.downs})\n`;
+    }
+    else {
+      if (currentDepth == 0) {
+        /*to make it unambiguous if two block quotes should be seperate or one and the same
+        they need to be seperated by at least one character not part of either (I chose NBSP)*/
+        output += '&amp;nbsp;\n\n'
+      }
+      output += `${depthTag}\n${depthTag}#### [**${comment.data.author}** ${comment.data.author_flair_text ? `'***${comment.data.author_flair_text}***' ` : ''}(↑ ${comment.data.ups}/ ↓ ${comment.data.downs}) @${new Date(comment.data.created_utc * 1000).toISOString()}${comment.data.edited ? ` (edited @${new Date(comment.data.edited * 1000).toISOString()})` : ''}](${getFieldUrl()}/${comment.data.id})\n${depthTag}\n${depthTag}${formatComment(comment.data.body).trimEnd().replace(/\n/g, `\n${depthTag}`)}\n`
+    }
   } else if (comment.kind === "more") {
     let parentID = comment.data.parent_id.substring(3);
     if (postLoadAdditionalComments) {
       loadMoreComments(getFieldUrl(), parentID, currentDepth); ""
     }
     else {
-      output += `${depthTag}comment depth-limit (${currentDepth}) reached. [view on reddit](${getFieldUrl()}/${parentID})\n`;
+      output += `${depthTag}${style == 2 ? `\n${depthTag}#### ` : ''}comment depth-limit (${currentDepth}) reached. [view on reddit](${getFieldUrl()}/${parentID})\n`;
     }
   } else {
-    output += `${depthTag}deleted\n`;
+    output += `${depthTag}${style == 2 ? `\n${depthTag}#### ` : ''}deleted\n`;
   }
 
   if (comment.data.replies) {
     const subComments = comment.data.replies.data.children;
     subComments.forEach((subComment) => displayComment(subComment, preexistingDepth != null ? preexistingDepth + 1 : null));
+  }
+  if (style == 2) {
+    /*do note, this is NOT depthTag, it has one fewer symbol
+    this is required forcibly split the block-quotes for two comments on the same level.
+    It technically generates more  markers than strictly necessary,
+    but those extra ones are not harmful, and depending on your interpretation,
+    can even more sematically correct than if they were absent*/
+    output += '>'.repeat(currentDepth);
+    output += '\n'
   }
 
   if (currentDepth == 0 && comment.data.replies) {

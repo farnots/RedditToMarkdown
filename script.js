@@ -344,7 +344,8 @@ function displayComment(comment, preexistingDepth = null) {
         they need to be seperated by at least one character not part of either (I chose NBSP)*/
         output += '&amp;nbsp;\n\n'
       }
-      output += `${depthTag}\n${depthTag}#### [**${comment.data.author}** ${comment.data.author_flair_text ? `'***${comment.data.author_flair_text}***' ` : ''}(↑ ${comment.data.ups}/ ↓ ${comment.data.downs}) @${new Date(comment.data.created_utc * 1000).toISOString()}${comment.data.edited ? ` (edited @${new Date(comment.data.edited * 1000).toISOString()})` : ''}](${getFieldUrl()}/${comment.data.id})\n${depthTag}\n${depthTag}${formatComment(comment.data.body).trimEnd().replace(/\n/g, `\n${depthTag}`)}\n`
+      output += `${depthTag}\n${depthTag}#### [**${comment.data.author}** ${comment.data.author_flair_text ? `'***${comment.data.author_flair_text}***' ` : ''}(↑ ${comment.data.ups}/ ↓ ${comment.data.downs}) @${new Date(comment.data.created_utc * 1000).toISOString()}${comment.data.edited ? ` (edited @${new Date(comment.data.edited * 1000).toISOString()})` : ''}](${getFieldUrl()}/${comment.data.id})\n${depthTag}\n${depthTag}${formatComment(comment.data.body).trimEnd().replace(/!&lt;/g, '!&amp;lt;').replace(/&gt;!/g, '&amp;gt;!').replace(/\n/g, `\n${depthTag}`)}\n`;
+      //the !&lt;/&gt;! replacement is to force retain the escaping of </> in spoiler tags to avoid confusion between blockquotes and spoilers
     }
   } else if (comment.kind === "more") {
     let parentID = comment.data.parent_id.substring(3);

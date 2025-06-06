@@ -1,9 +1,9 @@
 const http = new XMLHttpRequest();
-var data;
-var output = '';
-var style = 0;
-var escapeNewLine = false;
-var spaceComment = false;
+let data;
+let output = '';
+let style = 0;
+let escapeNewLine = false;
+let spaceComment = false;
 var selectedProxy = 'auto';
 
 // CORS Proxy configurations
@@ -191,11 +191,11 @@ async function fetchData(url) {
     comments.forEach(displayComment);
 
     console.log('Done');
-    var ouput_display = document.getElementById('ouput-display');
-    var ouput_block = document.getElementById('ouput-block');
-    ouput_block.removeAttribute('hidden');
-    ouput_display.innerHTML = output;
-    download(output, 'output.md', 'text/plain');
+    let output_display = document.getElementById('output-display');
+    let output_block = document.getElementById('output-block');
+    output_block.removeAttribute('hidden');
+    output_display.innerHTML = output;
+    download(document.getElementById('output-display').textContent, 'output.md', 'text/plain');
     
   } catch (error) {
     console.error('Fetch error:', error);
@@ -242,7 +242,7 @@ function startExport() {
   console.log('Start exporting');
   setStyle();
 
-  var url = getFieldUrl();
+  let url = getFieldUrl();
   if (url) {
     fetchData(url);
   } else {
@@ -250,12 +250,25 @@ function startExport() {
   }
 }
 
+async function copyExport() {
+  /*according to https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText
+  this should only work in 'Secure Contexts' (https or localhost/loopback addresses)
+  Since GitHub Pages supports https and getting a certificate for any other host is a 10 minute job
+  I believe it is acceptible to use this despite it's restrictions*/
+  try {
+    await navigator.clipboard.writeText(document.getElementById('output-display').textContent);
+  } catch (error) {
+    console.error(error.message);
+  }
+}
+
 function download(text, name, type) {
-  var a = document.getElementById('a');
-  a.removeAttribute('disabled');
-  var file = new Blob([text], {type: type});
-  a.href = URL.createObjectURL(file);
-  a.download = name;
+  document.getElementById('copyButton').removeAttribute('disabled');
+  let download_button = document.getElementById('downloadButton');
+  download_button.removeAttribute('disabled');
+  let file = new Blob([text], {type: type});
+  download_button.href = URL.createObjectURL(file);
+  download_button.download = name;
 }
 
 function displayTitle(post) {

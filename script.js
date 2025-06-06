@@ -370,7 +370,7 @@ function displayComment(comment, preexistingDepth = null) {
       loadMoreComments(getFieldUrl(), parentID, currentDepth); ""
     }
     else {
-      output += `${depthTag}comment depth-limit (${currentDepth}) reached\n`;
+      output += `${depthTag}comment depth-limit (${currentDepth}) reached. [view on reddit](${getFieldUrl()}/${parentID})\n`;
     }
   } else {
     output += `${depthTag}deleted\n`;

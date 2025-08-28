@@ -26,7 +26,7 @@ const PROXY_CONFIG = {
 };
 
 // Auto mode proxy order (try these in sequence)
-const AUTO_PROXY_ORDER = ['codetabs', 'corslol'];
+const AUTO_PROXY_ORDER = ['codetabs', 'corslol', 'direct'];
 
 const onDocumentReady = () => {
   document.getElementById('url-field').value = getQueryParamUrl();

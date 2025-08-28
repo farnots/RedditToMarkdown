@@ -28,12 +28,22 @@
     />
   </div>
 
+  <label>Acquisition option :</label>
+  <div class="form-check form-check-inine">
+    <input type="checkbox" class="form-check-input" id="postLoadComments" />
+    <label class="form-check-label" for="postLoadComments">
+      Load additional comments in seperate request if comment depth greather than 10
+    </label>
+  </div>
+
   <label>Export style :</label>
   <div class="form-check form-check-inline">
     <input class="form-check-input" type="radio" name="exportOption" id="treeOption" checked/>
     <label class="form-check-label" for="treeOption">Tree style</label>
     <input class="form-check-input" type="radio" name="exportOption" id="listOption"/>
     <label class="form-check-label" for="listOption">List style</label>
+    <input class="form-check-input" type="radio" name="exportOption" id="blockOption" />
+    <label class="form-check-label" for="blockOption">Blockquote style</label>
   </div>
 
   <label>Export option :</label>

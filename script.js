@@ -195,7 +195,7 @@ async function fetchData(url) {
     let output_block = document.getElementById('output-block');
     output_block.removeAttribute('hidden');
     output_display.innerHTML = output;
-    download(document.getElementById('output-display').textContent, 'output.md', 'text/plain');
+    download(output_display.textContent, 'output.md', 'text/plain');
     
   } catch (error) {
     console.error('Fetch error:', error);
@@ -254,11 +254,11 @@ async function copyExport() {
   /*according to https://developer.mozilla.org/en-US/docs/Web/API/Clipboard/writeText
   this should only work in 'Secure Contexts' (https or localhost/loopback addresses)
   Since GitHub Pages supports https and getting a certificate for any other host is a 10 minute job
-  I believe it is acceptible to use this despite it's restrictions*/
+  I believe it is acceptable to use this despite its restrictions*/
   try {
     await navigator.clipboard.writeText(document.getElementById('output-display').textContent);
   } catch (error) {
-    console.error(error.message);
+    console.error('Failed to copy to clipboard:', error.message);
   }
 }
 

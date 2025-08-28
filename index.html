@@ -46,6 +46,18 @@
     <label class="form-check-label" for="spaceComment">Space between main comment</label>
   </div>
 
+  <label>CORS Proxy Settings :</label>
+  <div class="form-group">
+    <select class="form-control" id="proxySelection">
+      <option value="auto">Auto (recommended) - Tries multiple proxies</option>
+      <option value="codetabs">CodeTabs</option>
+      <option value="corslol">CORS.lol</option>
+      <option value="direct">Direct - No proxy (may fail due to CORS)</option>
+    </select>
+    <small class="form-text text-muted">💡 CORS proxies help bypass browser restrictions. Auto mode tries multiple services if one fails.</small>
+    <small id="proxyStatus" class="form-text text-info" style="display: none;"></small>
+  </div>
+
   <button class="btn btn-primary" onclick="startExport()">Export</button>
   <a href="" id="a" download disabled class="btn btn-success">Download markdown file</a>
   <div id="ouput-block" hidden>

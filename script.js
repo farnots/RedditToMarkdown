@@ -153,7 +153,7 @@ async function fetchWithProxy(redditUrl, proxyKey) {
   });
 }
 
-function processRedditData(responseData) {
+function processRedditData(responseData, filename = 'output.md') {
   output = '';
   data = responseData;
   const post = data[0].data.children[0].data;
@@ -167,7 +167,7 @@ function processRedditData(responseData) {
   let output_block = document.getElementById('output-block');
   output_block.removeAttribute('hidden');
   output_display.innerHTML = output;
-  download(output_display.textContent, 'output.md', 'text/plain');
+  download(output_display.textContent, filename, 'text/plain');
 }
 
 async function fetchData(url) {
@@ -205,8 +205,9 @@ async function fetchData(url) {
     }
     
     // Process the data
-    processRedditData(responseData);
-
+    // Get last part of URL without query params
+    let filename = redditUrl.split(/\?|#|&/)[0].split('/').pop().replace('.json', '') + '.reddit.md';
+    processRedditData(responseData, filename);
   } catch (error) {
     console.error('Fetch error:', error);
     updateProxyStatus(`❌ Error: ${error.message}`);

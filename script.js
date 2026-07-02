@@ -30,10 +30,16 @@ const AUTO_PROXY_ORDER = ['codetabs', 'corslol', 'direct'];
 
 const onDocumentReady = () => {
   document.getElementById('url-field').value = getQueryParamUrl();
+  toggleJsonInput();
   if (getFieldUrl()) {
     startExport();
   }
 };
+
+function toggleJsonInput() {
+  const isJsonMode = document.getElementById('proxySelection').value === 'json';
+  document.getElementById('jsonInputSection').style.display = isJsonMode ? 'block' : 'none';
+}
 
 const getQueryParamUrl = () => new URLSearchParams(window.location.search).get(
     'url') ?? null;
@@ -147,13 +153,29 @@ async function fetchWithProxy(redditUrl, proxyKey) {
   });
 }
 
-async function fetchData(url) {
+function processRedditData(responseData) {
   output = '';
+  data = responseData;
+  const post = data[0].data.children[0].data;
+  const comments = data[1].data.children;
+  displayTitle(post);
+  output += '\n\n## Comments\n\n';
+  comments.forEach(displayComment);
+
+  console.log('Done');
+  let output_display = document.getElementById('output-display');
+  let output_block = document.getElementById('output-block');
+  output_block.removeAttribute('hidden');
+  output_display.innerHTML = output;
+  download(output_display.textContent, 'output.md', 'text/plain');
+}
+
+async function fetchData(url) {
   const redditUrl = formatRedditJsonUrl(url);
-  
+
   try {
     let responseData = null;
-    
+
     if (selectedProxy === 'auto') {
       // Try each proxy in sequence until one works
       for (const proxyKey of AUTO_PROXY_ORDER) {
@@ -183,20 +205,8 @@ async function fetchData(url) {
     }
     
     // Process the data
-    data = responseData;
-    const post = data[0].data.children[0].data;
-    const comments = data[1].data.children;
-    displayTitle(post);
-    output += '\n\n## Comments\n\n';
-    comments.forEach(displayComment);
+    processRedditData(responseData);
 
-    console.log('Done');
-    let output_display = document.getElementById('output-display');
-    let output_block = document.getElementById('output-block');
-    output_block.removeAttribute('hidden');
-    output_display.innerHTML = output;
-    download(output_display.textContent, 'output.md', 'text/plain');
-    
   } catch (error) {
     console.error('Fetch error:', error);
     updateProxyStatus(`❌ Error: ${error.message}`);
@@ -242,12 +252,35 @@ function startExport() {
   console.log('Start exporting');
   setStyle();
 
+  if (selectedProxy === 'json') {
+    exportFromJson();
+    return;
+  }
+
   let url = getFieldUrl();
   if (url) {
     fetchData(url);
   } else {
     console.log('No url provided');
   }
+}
+
+function exportFromJson() {
+  const jsonText = document.getElementById('jsonInput').value.trim();
+  if (!jsonText) {
+    alert('Paste Reddit JSON data into the text area.');
+    return;
+  }
+
+  let responseData;
+  try {
+    responseData = JSON.parse(jsonText);
+  } catch (error) {
+    alert(`That's not valid JSON data. Please review the instructions and try again.`);
+    return;
+  }
+
+  processRedditData(responseData);
 }
 
 async function copyExport() {

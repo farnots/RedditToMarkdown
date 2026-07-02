@@ -48,14 +48,29 @@
 
   <label>CORS Proxy Settings :</label>
   <div class="form-group">
-    <select class="form-control" id="proxySelection">
+    <select class="form-control" id="proxySelection" onchange="toggleJsonInput()">
       <option value="auto">Auto (recommended) - Tries multiple proxies and directs</option>
       <option value="codetabs">CodeTabs</option>
       <option value="corslol">CORS.lol</option>
       <option value="direct">Direct - No proxy (may fail due to CORS)</option>
+      <option value="json">JSON input - Paste Reddit JSON directly</option>
     </select>
     <small class="form-text text-muted">💡 CORS proxies help bypass browser restrictions. Auto mode tries multiple services if one fails.</small>
     <small id="proxyStatus" class="form-text text-info" style="display: none;"></small>
+  </div>
+
+  <div id="jsonInputSection" class="form-group" style="display: none;">
+    <div class="alert alert-info" role="alert">
+      <strong>How to use JSON input</strong>
+      <ol style="margin-bottom: 0; padding-left: 20px;">
+        <li>Open the Reddit post in another browser tab.</li>
+        <li>Add <code>.json</code> immediately before the <code>?</code>, if there is one, or else at the very end of the URL, and press Enter.</li>
+        <li>Copy all JSON data that appears.</li>
+        <li>Paste it into the text area below and click <strong>Export</strong>.</li>
+      </ol>
+    </div>
+    <label for="jsonInput">Reddit JSON data</label>
+    <textarea class="form-control" id="jsonInput" rows="8" placeholder='Paste the JSON from your Reddit post here, e.g. [{"kind": "Listing", ...}]'></textarea>
   </div>
 
   <button class="btn btn-primary" onclick="startExport()">Export</button>

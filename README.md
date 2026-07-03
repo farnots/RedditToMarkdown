@@ -15,3 +15,7 @@ You can download the source and open the *index.html* file or just go to [https:
 ## Feedbacks
 
 Feel free to share the project and send feeback to improve it ! 
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
